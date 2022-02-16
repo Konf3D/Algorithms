@@ -4,26 +4,34 @@ namespace Insert
 int InterpolationInsert(std::vector<int>& vector, int target)
 {
     int begin = 0, end = vector.size() - 1;
-    int mid = begin + (end - begin) * (target - vector[begin]) / (vector[end] - vector[begin]);
     while (begin < end)
     {
+        int mid = begin + (end - begin) * (target - vector[begin]) / (vector[end] - vector[begin]);
+        if (mid < begin)
+            mid = begin + 1;
+        if (mid > end)
+            mid = end - 1;
         if (target == vector[mid])
-            return mid;
+        {
+            begin = mid;
+            break;
+        }
         if (target < vector[mid])
         {
-            end = mid;
+            end = mid - 1;
         }
         else
         {
-            begin = mid;
+            begin = mid + 1;
         }
-        mid = begin + (end - begin) * (target - vector[begin]) / (vector[end] - vector[begin]);
     }
+    vector.insert(vector.begin() + begin, target);
     return begin;
 }
 
-int BinaryInsert(std::vector<int>& vector, int begin, int end, int target)
+int BinaryInsert(std::vector<int>& vector, int target)
 {
+    int begin = 0, end = vector.size() - 1;
     if (begin == end)
         return begin;
     int devider = (begin + end) / 2;
@@ -31,8 +39,8 @@ int BinaryInsert(std::vector<int>& vector, int begin, int end, int target)
     {
         if (vector[devider] == target)
         {
-            vector.insert(vector.begin() + devider, target);
-            return devider;
+            begin = devider;
+            break;
         }
         if (vector[devider] < target)
         {
